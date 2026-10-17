@@ -1,0 +1,47 @@
+# Carol Lussana | Cabelos — configuração para Hostinger (LiteSpeed/Apache)
+# Este arquivo vai junto no upload do conteúdo de dist/ para public_html/.
+
+Options -Indexes
+DirectoryIndex index.html
+
+# ---------- HTTPS + domínio canônico (sem www) ----------
+# Se estiver testando num domínio temporário da Hostinger, comente as 4 linhas abaixo.
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://carollussana.com%{REQUEST_URI} [L,R=301]
+
+# Bloqueia arquivos ocultos (.git, .env etc.)
+RewriteRule (^|/)\.(?!well-known/) - [F]
+
+# ---------- Tipos MIME ----------
+AddType image/avif .avif
+AddType image/webp .webp
+AddType application/manifest+json .webmanifest
+AddType text/plain .txt
+AddDefaultCharset utf-8
+AddCharset utf-8 .js .css .json .webmanifest .xml .txt
+
+# ---------- Compressão (LiteSpeed também aplica Brotli automaticamente) ----------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml text/javascript application/javascript application/json application/xml application/manifest+json image/svg+xml
+</IfModule>
+
+# ---------- Cache ----------
+# Arquivos com hash ficam em /assets/ (ver assets/.htaccess: 1 ano, immutable).
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(ico|png|jpg|svg|webmanifest|xml|txt)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+
+  # ---------- Segurança ----------
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Strict-Transport-Security "max-age=31536000"
+  # Próximo passo sugerido: Content-Security-Policy (testar antes em modo Report-Only)
+</IfModule>

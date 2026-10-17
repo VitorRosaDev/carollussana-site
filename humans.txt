@@ -1,0 +1,10 @@
+/* CLIENTE */
+Carol Lussana | Cabelos
+Cabeleireira profissional · Sebastian Professional Brasil Artist
+Instagram: @carollussana
+Site: https://carollussana.com/
+
+/* SITE */
+Idioma: pt-BR
+Stack: Vite, GSAP (ScrollTrigger, SplitText, DrawSVG), Lenis, Three.js
+Fontes: Archivo Black, Montserrat, Bricolage Grotesque (Google Fonts)
